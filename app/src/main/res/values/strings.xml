@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name_release">kokasin</string>
+    <string name="app_name_debug">kokasin(개발)</string>
+</resources>
