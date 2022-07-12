@@ -85,13 +85,14 @@ open class BaseActivity: AppCompatActivity() {
         val checkedDate = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.TOKEN_DATE, 0)  // 가져온 날짜
 
         if(checkedDate < currentDate) {
-      //      requestGetToken()
+            val refreshToken: String? = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
+            if(refreshToken != "") requestGetToken()
         }
     }
 
     // 기기정보, 푸시 토큰 등록
     fun requestRegisterInfo() {
-        val url = "${BuildConfig.apiUrl}/api/mobile/device/upd"
+        val url = "${BuildConfig.apiUrl}/api/guard/upd/phone"
         val deviceId = CommonUtil.getDeviceId(this@BaseActivity)
         val appVersion = CommonUtil.getAppVersion(this@BaseActivity)
         val pushToken = PreferenceUtil(this@BaseActivity).getValue(
@@ -106,12 +107,12 @@ open class BaseActivity: AppCompatActivity() {
 
         val jsonObject = JSONObject()
         jsonObject.put("osType", "A")
-        jsonObject.put("dvceId", encDeviceId)
+        jsonObject.put("deviceId", encDeviceId)
         jsonObject.put("appVer", appVersion)
-        jsonObject.put("dvceName", Build.MODEL)
+        //jsonObject.put("dvceName", Build.MODEL)
         jsonObject.put("osVer", Build.VERSION.RELEASE)
         jsonObject.put("pushYn", pushYn)
-        jsonObject.put("pushId", encPushToken)
+        jsonObject.put("pushToken", encPushToken)
 
         LogUtil.e("requestRegisterInfo : ${url}")
         LogUtil.e("params : ${jsonObject}")
@@ -142,19 +143,22 @@ open class BaseActivity: AppCompatActivity() {
 
     // x-auth-token 요청
     fun requestGetToken() {
-        val url = BuildConfig.apiUrl + "/api/guard/get/token"
+        val url = BuildConfig.apiUrl + "/api/guard/get/ref/token"
         LogUtil.e("requestGetToken : $url")
+        val refreshToken = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
+        val jsonObject = JSONObject()
+        jsonObject.put("refreshToken", refreshToken)
 
-        val request: StringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->
+        val request: JsonObjectRequest = object : JsonObjectRequest(
+            Method.POST, url, jsonObject, Response.Listener<JSONObject> { response ->
                 LogUtil.e("requestGetToken => $response")
 
-                val json = JsonParser.parseString(response).asJsonObject
-                val status = json["status"].asString
+
+                val status = response.getString("status")
 
                 if (status.uppercase() == "SUCCESS") {
-                    val data = json["data"].asJsonObject
-                    val token = data["token"].asString
+                    val token = response.getString("data")
+
                     PreferenceUtil(this).put(PreferenceUtil.KEYS.TOKEN, token)  // 토큰 저장
 
                     val sdf = SimpleDateFormat("yyyyMMdd")

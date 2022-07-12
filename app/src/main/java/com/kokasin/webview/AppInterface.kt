@@ -285,11 +285,14 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
 
             // 로그인 ID 넣어서 기기정보 등록 (서버 호출)
             "sendDeviceInfo" -> {
-                val loginId = CommonUtil.getStringJsonObject(json, "loginId")
+                val guardPhone = CommonUtil.getStringJsonObject(json, "guardPhone")
                 val token = CommonUtil.getStringJsonObject(json, "token")
+                val refreshToken = CommonUtil.getStringJsonObject(json, "refreshToken")
 
-                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.LOGIN_ID, loginId)
+                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.GUARD_PHONE, guardPhone)
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.TOKEN, token)
+                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.REFRESH_TOKEN, refreshToken)
+
 
                 if(isFirstCall) {
                     mActivity.requestRegisterInfo()
@@ -299,7 +302,7 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
 
             // 로그아웃 시 데이터 삭제
             "appLogout" -> {
-                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.LOGIN_ID, "")
+                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.GUARD_PHONE, "")
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.TOKEN, "")
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.TOKEN_DATE, 0)
             }
@@ -380,7 +383,7 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
             "getDeviceInfo" -> {
                 val callback = CommonUtil.getStringJsonObject(json, "callback")
                 val pushToken = PreferenceUtil(mActivity).getValue(PreferenceUtil.KEYS.PUSH_ID, "")
-                val loginId = PreferenceUtil(mActivity).getValue(PreferenceUtil.KEYS.LOGIN_ID, "")
+                val guardPhone = PreferenceUtil(mActivity).getValue(PreferenceUtil.KEYS.GUARD_PHONE, "")
                 val mapParams: MutableMap<String, String> = HashMap()
 
                 mapParams["os_type"] = "A"
@@ -389,7 +392,7 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
                 mapParams["dvc_mdel"] = Build.MODEL
                 mapParams["os_ver"] = Build.VERSION.RELEASE
                 mapParams["push_token"] = pushToken
-                mapParams["login_id"] = loginId
+                mapParams["guard_phone"] = guardPhone
 
                 // Map to JSON
                 val jsonParams = JSONObject(mapParams as Map<*, *>)

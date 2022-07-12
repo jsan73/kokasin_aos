@@ -26,7 +26,7 @@ class MainWebViewActivity :BaseWebViewActivity() {
 //        startActivity(intent)
 
         initUI()
-//        executeLogin()  // 자동로그인 실행
+        executeLogin()  // 자동로그인 실행
 //
 //        // 백그라운드에서 푸시 알림 선택하여 실행했는지 체크 (바로 실행하면 안열림)
 //        Handler(Looper.getMainLooper()).postDelayed({
@@ -40,7 +40,7 @@ class MainWebViewActivity :BaseWebViewActivity() {
     }
 
     override fun onBackPressed() {
-        if(binding.wvMain.url!!.startsWith(DomainUtil.mainUrl(this))) {  // 메인화면
+        if(binding.wvMain.url.equals(DomainUtil.mainUrl(this))) {  // 메인화면
             // 2초 동안 Back Key 를 두 번 연속 누르면 어플 종료
             if (!mIsFinish) {
                 mExitTimer.schedule(object : TimerTask() {

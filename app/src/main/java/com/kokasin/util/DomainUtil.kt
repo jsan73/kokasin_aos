@@ -31,7 +31,7 @@ object DomainUtil {
         if(BuildConfig.DEBUG) {
             val domain = PreferenceUtil(context).getValue(PreferenceUtil.KEYS.DOMAIN_URL, "")
             if(!TextUtils.isEmpty(domain) && URLUtil.isValidUrl(domain)) {
-                return "$domain/main"
+                return "$domain"
             }
         }
         return Constants.URL.MAIN_URL

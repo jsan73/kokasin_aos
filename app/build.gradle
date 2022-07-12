@@ -28,10 +28,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             // 개발 테스트
-            def domain = '\"https://m-dev.kkokasin.com:8081\"'
+            def domain = '\"http://m-dev.kokasin.com\"'
             buildConfigField 'String', 'serverUrl', "$domain"
-            buildConfigField 'String', 'loginUrl', '\"https://m-dev.kkokasin.com:8081/login\"'
-            buildConfigField 'String', 'apiUrl', '\"https://was-dev.kkokasin.com\"'
+            buildConfigField 'String', 'loginUrl', '\"http://m-dev.kokasin.com\"'
+            buildConfigField 'String', 'apiUrl', '\"http://api-dev.kokasin.com\"'
         }
         release {
             resValue("string", "app_name", "@string/app_name_release")
@@ -40,8 +40,8 @@ android {
 
             def domain = '\"https://m.kkokasin.com\"'
             buildConfigField 'String', 'serverUrl', "$domain"
-            buildConfigField 'String', 'loginUrl', '\"https://m.kkokasin.com/login\"'
-            buildConfigField 'String', 'apiUrl', '\"https://was.kkokasin.com\"'
+            buildConfigField 'String', 'loginUrl', '\"https://m.kokasin.com/login\"'
+            buildConfigField 'String', 'apiUrl', '\"https://api.kokasin.com\"'
         }
     }
     compileOptions {

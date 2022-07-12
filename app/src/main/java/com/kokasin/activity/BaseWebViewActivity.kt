@@ -86,7 +86,7 @@ open class BaseWebViewActivity :BaseActivity() {
         }
 
         // 디폴트 false (사용 시 인터페이스 호출)
-        val isDebug = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.DEBUGGING_YN, "N")
+        val isDebug = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.DEBUGGING_YN, "Y")
         if(isDebug == "Y") {
             WebView.setWebContentsDebuggingEnabled(true)
         }
@@ -109,7 +109,7 @@ open class BaseWebViewActivity :BaseActivity() {
         webSettings.setAppCacheEnabled(true)
 
         val userAgent = webSettings.userAgentString
-        webSettings.userAgentString = "$userAgent kokasin-m" //"$userAgent rion-mini-and"
+        webSettings.userAgentString = "$userAgent kokasin-aos" //"$userAgent rion-mini-and"
 
         webView.requestFocus()
         webView.isFocusableInTouchMode = true
@@ -373,7 +373,7 @@ open class BaseWebViewActivity :BaseActivity() {
 
     // 네이티브 로딩바 show/hide
     public fun setLoadingProgressBar(visibility: Int) {
-        mProgressLoading.visibility = visibility
+//        mProgressLoading.visibility = visibility
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

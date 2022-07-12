@@ -9,10 +9,11 @@ class PreferenceUtil(private val context: Context) {
 
     object KEYS {
         const val PREF_NAME = "settings"
-        const val TOKEN = "token"  // 토큰만 암호화 (굿리치플래너에서 현재 미사용)
+        const val TOKEN = "token"
+        const val REFRESH_TOKEN = "refreshToken"
         const val TOKEN_DATE = "token_date"  // 토큰 저장한 날짜
         const val PUSH_ID = "push_id"
-        const val LOGIN_ID = "login_id"
+        const val GUARD_PHONE = "guard_phone"
         const val DEBUGGING_YN = "debugging_yn"
         const val DOMAIN_URL = "domain_url"  // 서버에서 도메인 설정 (테스트용)
     }
@@ -21,18 +22,19 @@ class PreferenceUtil(private val context: Context) {
         val pref = context.getSharedPreferences(KEYS.PREF_NAME, Activity.MODE_PRIVATE)
         val editor = pref.edit()
         try {
-            if(!TextUtils.isEmpty(value)) {
-                if(key == KEYS.TOKEN) {
-                    val encText = AES256Util().aesEncode(value)
-                    editor.putString(key, encText)
-                }
-                else {
-                    editor.putString(key, value)
-                }
-            }
-            else {
-                editor.putString(key, value)
-            }
+            editor.putString(key, value)
+//            if(!TextUtils.isEmpty(value)) {
+//                if(key == KEYS.TOKEN) {
+//                    val encText = AES256Util().aesEncode(value)
+//                    editor.putString(key, encText)
+//                }
+//                else {
+//                    editor.putString(key, value)
+//                }
+//            }
+//            else {
+//                editor.putString(key, value)
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
             editor.putString(key, value)
@@ -70,15 +72,16 @@ class PreferenceUtil(private val context: Context) {
         val value = pref.getString(key, dftValue)
 
         return try {
-            if(!TextUtils.isEmpty(value)) {
-                if(key == KEYS.TOKEN) {
-                    AES256Util().aesDecode(value!!)
-                } else {
-                    value!!
-                }
-            } else {
-                value!!
-            }
+            value!!
+//            if(!TextUtils.isEmpty(value)) {
+//                if(key == KEYS.TOKEN) {
+//                    AES256Util().aesDecode(value!!)
+//                } else {
+//                    value!!
+//                }
+//            } else {
+//                value!!
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
             dftValue
