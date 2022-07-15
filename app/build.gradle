@@ -30,7 +30,6 @@ android {
             // 개발 테스트
             def domain = '\"http://m-dev.kokasin.com\"'
             buildConfigField 'String', 'serverUrl', "$domain"
-            buildConfigField 'String', 'loginUrl', '\"http://m-dev.kokasin.com\"'
             buildConfigField 'String', 'apiUrl', '\"http://api-dev.kokasin.com\"'
         }
         release {
@@ -40,7 +39,6 @@ android {
 
             def domain = '\"https://m.kkokasin.com\"'
             buildConfigField 'String', 'serverUrl', "$domain"
-            buildConfigField 'String', 'loginUrl', '\"https://m.kokasin.com/login\"'
             buildConfigField 'String', 'apiUrl', '\"https://api.kokasin.com\"'
         }
     }

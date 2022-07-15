@@ -39,7 +39,7 @@ open class BaseActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkTokenValidation()
+        //checkTokenValidation()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -78,17 +78,17 @@ open class BaseActivity: AppCompatActivity() {
         dialog.show()
     }
 
-    // 1일 1회 토큰 가져오기
-    private fun checkTokenValidation() {
-        val sdf = SimpleDateFormat("yyyyMMdd")
-        val currentDate = sdf.format(Date()).toInt()
-        val checkedDate = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.TOKEN_DATE, 0)  // 가져온 날짜
-
-        if(checkedDate < currentDate) {
-            val refreshToken: String? = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
-            if(refreshToken != "") requestGetToken()
-        }
-    }
+//    // 1일 1회 토큰 가져오기
+//    private fun checkTokenValidation() {
+//        val sdf = SimpleDateFormat("yyyyMMdd")
+//        val currentDate = sdf.format(Date()).toInt()
+//        val checkedDate = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.TOKEN_DATE, 0)  // 가져온 날짜
+//
+//        if(checkedDate < currentDate) {
+//            val refreshToken: String? = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
+//            if(refreshToken != "") requestGetToken()
+//        }
+//    }
 
     // 기기정보, 푸시 토큰 등록
     fun requestRegisterInfo() {
@@ -142,57 +142,57 @@ open class BaseActivity: AppCompatActivity() {
     }
 
     // x-auth-token 요청
-    fun requestGetToken() {
-        val url = BuildConfig.apiUrl + "/api/guard/get/ref/token"
-        LogUtil.e("requestGetToken : $url")
-        val refreshToken = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
-        val jsonObject = JSONObject()
-        jsonObject.put("refreshToken", refreshToken)
-
-        val request: JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, url, jsonObject, Response.Listener<JSONObject> { response ->
-                LogUtil.e("requestGetToken => $response")
-
-
-                val status = response.getString("status")
-
-                if (status.uppercase() == "SUCCESS") {
-                    val token = response.getString("data")
-
-                    PreferenceUtil(this).put(PreferenceUtil.KEYS.TOKEN, token)  // 토큰 저장
-
-                    val sdf = SimpleDateFormat("yyyyMMdd")
-                    val currentDate = sdf.format(Date()).toInt()
-                    PreferenceUtil(this).put(PreferenceUtil.KEYS.TOKEN_DATE, currentDate)  // 날짜 저장
-                }
-                else {
-                    val dialog = CommonDialog(this)
-                    val cancelListener = View.OnClickListener {
-                        dialog.dismiss()
-                    }
-                    val okListener = View.OnClickListener {
-                        dialog.dismiss()
-                        requestGetToken()
-                    }
-                    openDialogAlert(dialog, "", "유효한 토큰을 가져오지 못했습니다.\n다시 시도하시겠습니까?",
-                        "취소", "재시도", false, cancelListener, okListener)
-                }
-            },
-            Response.ErrorListener { error ->
-                LogUtil.e("test", "ErrorListener => " + "토큰 요청 실패 : ${error.message}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                val ck = CookieManager.getInstance().getCookie(DomainUtil.serverUrl(this@BaseActivity))
-                if(!TextUtils.isEmpty(ck)) {
-                    params["Cookie"] = ck
-                    params["Content-Type"] = "application/json"
-                    params["Accept"] = "application/json"
-                }
-                return params
-            }
-        }
-        request.setShouldCache(false)
-        Volley.newRequestQueue(this).add(request)
-    }
+//    fun requestGetToken() {
+//        val url = BuildConfig.apiUrl + "/api/guard/get/ref/token"
+//        LogUtil.e("requestGetToken : $url")
+//        val refreshToken = PreferenceUtil(applicationContext).getValue(PreferenceUtil.KEYS.REFRESH_TOKEN, "")
+//        val jsonObject = JSONObject()
+//        jsonObject.put("refreshToken", refreshToken)
+//
+//        val request: JsonObjectRequest = object : JsonObjectRequest(
+//            Method.POST, url, jsonObject, Response.Listener<JSONObject> { response ->
+//                LogUtil.e("requestGetToken => $response")
+//
+//
+//                val status = response.getString("status")
+//
+//                if (status.uppercase() == "SUCCESS") {
+//                    val token = response.getString("data")
+//
+//                    PreferenceUtil(this).put(PreferenceUtil.KEYS.TOKEN, token)  // 토큰 저장
+//
+//                    val sdf = SimpleDateFormat("yyyyMMdd")
+//                    val currentDate = sdf.format(Date()).toInt()
+//                    PreferenceUtil(this).put(PreferenceUtil.KEYS.TOKEN_DATE, currentDate)  // 날짜 저장
+//                }
+//                else {
+//                    val dialog = CommonDialog(this)
+//                    val cancelListener = View.OnClickListener {
+//                        dialog.dismiss()
+//                    }
+//                    val okListener = View.OnClickListener {
+//                        dialog.dismiss()
+//                        requestGetToken()
+//                    }
+//                    openDialogAlert(dialog, "", "유효한 토큰을 가져오지 못했습니다.\n다시 시도하시겠습니까?",
+//                        "취소", "재시도", false, cancelListener, okListener)
+//                }
+//            },
+//            Response.ErrorListener { error ->
+//                LogUtil.e("test", "ErrorListener => " + "토큰 요청 실패 : ${error.message}")
+//            }) {
+//            override fun getHeaders(): MutableMap<String, String> {
+//                val params: MutableMap<String, String> = HashMap()
+//                val ck = CookieManager.getInstance().getCookie(DomainUtil.serverUrl(this@BaseActivity))
+//                if(!TextUtils.isEmpty(ck)) {
+//                    params["Cookie"] = ck
+//                    params["Content-Type"] = "application/json"
+//                    params["Accept"] = "application/json"
+//                }
+//                return params
+//            }
+//        }
+//        request.setShouldCache(false)
+//        Volley.newRequestQueue(this).add(request)
+//    }
 }

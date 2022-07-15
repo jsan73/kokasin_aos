@@ -17,16 +17,6 @@ object DomainUtil {
         return BuildConfig.serverUrl
     }
 
-    fun loginUrl(context: Context): String {
-        if(BuildConfig.DEBUG) {
-            val domain = PreferenceUtil(context).getValue(PreferenceUtil.KEYS.DOMAIN_URL, "")
-            if(!TextUtils.isEmpty(domain) && URLUtil.isValidUrl(domain)) {
-                return "https://sso-dev.richnco.kr/account/login?returnUrl=$domain"
-            }
-        }
-        return Constants.URL.LOGIN_URL
-    }
-
     fun mainUrl(context: Context): String {
         if(BuildConfig.DEBUG) {
             val domain = PreferenceUtil(context).getValue(PreferenceUtil.KEYS.DOMAIN_URL, "")

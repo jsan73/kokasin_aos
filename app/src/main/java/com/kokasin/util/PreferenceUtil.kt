@@ -3,7 +3,7 @@ package com.kokasin.util
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
-import kr.richnco.goodrichplannermobile.util.AES256Util
+
 
 class PreferenceUtil(private val context: Context) {
 

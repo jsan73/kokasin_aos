@@ -7,9 +7,13 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kokasin.R
 import com.kokasin.databinding.ActivityMainWebviewBinding
 import com.kokasin.util.DomainUtil
+import com.kokasin.util.LogUtil
+import com.kokasin.util.PreferenceUtil
 import java.util.*
 
 class MainWebViewActivity :BaseWebViewActivity() {
@@ -26,7 +30,8 @@ class MainWebViewActivity :BaseWebViewActivity() {
 //        startActivity(intent)
 
         initUI()
-        executeLogin()  // 자동로그인 실행
+        saveFcmToken()
+        loadMain()  // 자동로그인 실행
 //
 //        // 백그라운드에서 푸시 알림 선택하여 실행했는지 체크 (바로 실행하면 안열림)
 //        Handler(Looper.getMainLooper()).postDelayed({
@@ -68,7 +73,16 @@ class MainWebViewActivity :BaseWebViewActivity() {
             }
         }
     }
-
+    // 푸시 토큰 저장
+    private fun saveFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if(task.isSuccessful) {
+                val token = task.result
+                PreferenceUtil(this).put(PreferenceUtil.KEYS.PUSH_ID, token)
+                LogUtil.e("test", "push token : $token")
+            }
+        })
+    }
     private fun initUI() {
         setWebView(this, binding.wvMain)
         setJavascriptInterface(null)

@@ -304,6 +304,7 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
             "appLogout" -> {
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.GUARD_PHONE, "")
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.TOKEN, "")
+                PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.REFRESH_TOKEN , "")
                 PreferenceUtil(mActivity).put(PreferenceUtil.KEYS.TOKEN_DATE, 0)
             }
 
@@ -344,11 +345,11 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
             }
 
             // 자동로그인 실행
-            "runAutoLogin" -> {
-                mWebView.post {
-                    mActivity.executeLogin()
-                }
-            }
+//            "runAutoLogin" -> {
+//                mWebView.post {
+//                    mActivity.executeLogin()
+//                }
+//            }
 
             // 로딩바 보임/숨김
             "setLoadingView" -> {

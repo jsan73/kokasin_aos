@@ -215,21 +215,6 @@ object CommonUtil {
         return PreferenceUtil(context).getValue(PreferenceUtil.KEYS.PUSH_ID, "")
     }
 
-    // 암호화 하여 리턴
-    fun getEndData(text: String): String {
-        val s = SeedCBC()
-        val retMsg: String = s.SetConfig(Constants.KEY.SEED_KEY_IV, Constants.KEY.SEED_KEY_MK)
-        return if (retMsg == "OK") {
-            val bEncodedData = Base64.encode(
-                s.Encryption(text.toByteArray()),
-                Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_CLOSE or Base64.NO_WRAP
-            )
-            val encData = String(bEncodedData)
-            encData.trim { it <= ' ' }
-        } else {
-            ""
-        }
-    }
 
     // 파일의 MIME 타입 리턴
     fun getMimeType(context: Context, uri: Uri): String? {

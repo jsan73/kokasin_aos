@@ -109,7 +109,7 @@ open class BaseWebViewActivity :BaseActivity() {
         webSettings.setAppCacheEnabled(true)
 
         val userAgent = webSettings.userAgentString
-        webSettings.userAgentString = "$userAgent kokasin-aos" //"$userAgent rion-mini-and"
+        webSettings.userAgentString = "$userAgent kokasin-aos"
 
         webView.requestFocus()
         webView.isFocusableInTouchMode = true
@@ -348,24 +348,32 @@ open class BaseWebViewActivity :BaseActivity() {
     }
 
     // 자동로그인 실행
-    fun executeLogin() {
-        // 항상 파라미터 넣어서 로그인 URL 호출하고, 자동로그인 여부는 SSO 서버에서 체크
-        val sdfNow = SimpleDateFormat("yyyyMMddHHmmss")
-        val deviceId: String = CommonUtil.getDeviceId(this)
-        val pushId: String = CommonUtil.getPushId(this)
-        val dateTime = sdfNow.format(Date(System.currentTimeMillis()))
-        val encDeviceId: String = CommonUtil.getEndData(deviceId)
-        val encPushId: String = CommonUtil.getEndData(pushId)
-        val encDateTime: String = CommonUtil.getEndData(dateTime)
+//    fun executeLogin() {
+//        // 항상 파라미터 넣어서 로그인 URL 호출하고, 자동로그인 여부는 SSO 서버에서 체크
+//        val sdfNow = SimpleDateFormat("yyyyMMddHHmmss")
+//        val deviceId: String = CommonUtil.getDeviceId(this)
+//        val pushId: String = CommonUtil.getPushId(this)
+//        val dateTime = sdfNow.format(Date(System.currentTimeMillis()))
+//        val encDeviceId: String = CommonUtil.getEndData(deviceId)
+//        val encPushId: String = CommonUtil.getEndData(pushId)
+//        val encDateTime: String = CommonUtil.getEndData(dateTime)
+//
+//        try {
+//            val postData =
+//                "dvceId=" + URLEncoder.encode(encDeviceId, "utf-8") +
+//                        "&pushId=" + URLEncoder.encode(encPushId, "utf-8") +
+//                        "&dt=" + URLEncoder.encode(encDateTime, "utf-8") +
+//                        "&serviceId=rion-mini"  // serviceId 는 도메인 앞 글자와 일치해야 함 (암호화 하지 않음)
+//
+//            mBaseWebView.postUrl(DomainUtil.loginUrl(this), postData.toByteArray())
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 
+    fun loadMain() {
         try {
-            val postData =
-                "dvceId=" + URLEncoder.encode(encDeviceId, "utf-8") +
-                        "&pushId=" + URLEncoder.encode(encPushId, "utf-8") +
-                        "&dt=" + URLEncoder.encode(encDateTime, "utf-8") +
-                        "&serviceId=rion-mini"  // serviceId 는 도메인 앞 글자와 일치해야 함 (암호화 하지 않음)
-
-            mBaseWebView.postUrl(DomainUtil.loginUrl(this), postData.toByteArray())
+            mBaseWebView.loadUrl(DomainUtil.serverUrl(this))
         } catch (e: Exception) {
             e.printStackTrace()
         }
