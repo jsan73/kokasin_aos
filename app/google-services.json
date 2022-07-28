@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "112972226933",
+    "project_id": "kokasin-push",
+    "storage_bucket": "kokasin-push.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112972226933:android:a54577611b633997d5f33c",
+        "android_client_info": {
+          "package_name": "com.kokasin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112972226933-pdk04hel3dvigedjgcjo9760kib3b82j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjm9Ov-B1J4PRN3b_po51TyZS8zTEhEj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112972226933-pdk04hel3dvigedjgcjo9760kib3b82j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

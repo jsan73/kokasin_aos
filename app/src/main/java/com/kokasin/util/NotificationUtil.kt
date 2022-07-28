@@ -50,12 +50,12 @@ object NotificationUtil {
         try {
             // 키 값은 서버와 같아야 함
             val title = URLDecoder.decode(bundle.getString("title"), "utf-8")
-            val message = URLDecoder.decode(bundle.getString("msg"), "utf-8")
+            val message = URLDecoder.decode(bundle.getString("body"), "utf-8")
             val imgUrl = bundle.getString("imgUrl")
             val badge = bundle.getString("badge")?.toInt()
             val builder = NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
 //                    .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.notification_large_icon))
-//                    .setSmallIcon(R.drawable.icon_notification_96_w)
+                    .setSmallIcon(R.drawable.icon_notification_96_w)
 //                    .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     .setContentTitle(title)
                     .setContentText(message)

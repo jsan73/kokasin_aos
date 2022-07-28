@@ -67,86 +67,86 @@ class AppInterface(activity: BaseWebViewActivity, webView: WebView, appListener:
 
     private val mListener: AppListener? = appListener
 
-    private val mListenerMms: RequestListener<Drawable> = object : RequestListener<Drawable> {
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any,
-            target: Target<Drawable>,
-            isFirstResource: Boolean
-        ): Boolean {
-            return false
-        }
-
-        override fun onResourceReady(
-            resource: Drawable,
-            model: Any,
-            target: Target<Drawable>,
-            dataSource: DataSource,
-            isFirstResource: Boolean
-        ): Boolean {
-            Thread(Runnable {
-                try {
-                    val bitmap = (resource as BitmapDrawable).bitmap
-                    val file: File? = CommonUtil.getImageFile(mActivity, bitmap, mImageUrlMMS)
-                    if (file != null) {
-                        val targetedShareIntents: ArrayList<Intent> = ArrayList()
-                        val nameArray = ArrayList<String>()
-                        nameArray.add("mms")
-                        nameArray.add("messaging")
-
-                        val mmsIntent: Intent? = CommonUtil.getShareIntent(
-                            mActivity,
-                            nameArray,
-                            "",
-                            mMessageMMS
-                        )
-
-                        if (mmsIntent != null) {
-                            // targetSdkVersion 24 이상
-                            val uri = FileProvider.getUriForFile(
-                                mActivity,
-                                mActivity.packageName,
-                                file
-                            )
-
-                            // targetSdkVersion 23 이하
-                            //Uri uri = getImageUri(getApplicationContext(), bitmap);
-
-                            mmsIntent.putExtra(Intent.EXTRA_STREAM, uri)
-                            mmsIntent.type = "image/*"
-                            targetedShareIntents.add(mmsIntent)
-
-                            val chooser = Intent.createChooser(
-                                targetedShareIntents.removeAt(0) as Intent?,
-                                ""
-                            )
-                            chooser.putExtra(
-                                Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(
-                                    arrayOf<Parcelable>()
-                                )
-                            )
-                            mActivity.startActivity(chooser)
-                        } else {
-                            Thread(Runnable {
-                                Looper.prepare()
-                                Handler().post {
-                                    Toast.makeText(
-                                        mActivity,
-                                        "문자를 보낼 수 있는 앱이 없습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                Looper.loop()
-                            }).start()
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }).start()
-            return false
-        }
-    }
+//    private val mListenerMms: RequestListener<Drawable> = object : RequestListener<Drawable> {
+//        override fun onLoadFailed(
+//            e: GlideException?,
+//            model: Any,
+//            target: Target<Drawable>,
+//            isFirstResource: Boolean
+//        ): Boolean {
+//            return false
+//        }
+//
+//        override fun onResourceReady(
+//            resource: Drawable,
+//            model: Any,
+//            target: Target<Drawable>,
+//            dataSource: DataSource,
+//            isFirstResource: Boolean
+//        ): Boolean {
+//            Thread(Runnable {
+//                try {
+//                    val bitmap = (resource as BitmapDrawable).bitmap
+//                    val file: File? = CommonUtil.getImageFile(mActivity, bitmap, mImageUrlMMS)
+//                    if (file != null) {
+//                        val targetedShareIntents: ArrayList<Intent> = ArrayList()
+//                        val nameArray = ArrayList<String>()
+//                        nameArray.add("mms")
+//                        nameArray.add("messaging")
+//
+//                        val mmsIntent: Intent? = CommonUtil.getShareIntent(
+//                            mActivity,
+//                            nameArray,
+//                            "",
+//                            mMessageMMS
+//                        )
+//
+//                        if (mmsIntent != null) {
+//                            // targetSdkVersion 24 이상
+//                            val uri = FileProvider.getUriForFile(
+//                                mActivity,
+//                                mActivity.packageName,
+//                                file
+//                            )
+//
+//                            // targetSdkVersion 23 이하
+//                            //Uri uri = getImageUri(getApplicationContext(), bitmap);
+//
+//                            mmsIntent.putExtra(Intent.EXTRA_STREAM, uri)
+//                            mmsIntent.type = "image/*"
+//                            targetedShareIntents.add(mmsIntent)
+//
+//                            val chooser = Intent.createChooser(
+//                                targetedShareIntents.removeAt(0) as Intent?,
+//                                ""
+//                            )
+//                            chooser.putExtra(
+//                                Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(
+//                                    arrayOf<Parcelable>()
+//                                )
+//                            )
+//                            mActivity.startActivity(chooser)
+//                        } else {
+//                            Thread(Runnable {
+//                                Looper.prepare()
+//                                Handler().post {
+//                                    Toast.makeText(
+//                                        mActivity,
+//                                        "문자를 보낼 수 있는 앱이 없습니다.",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//                                Looper.loop()
+//                            }).start()
+//                        }
+//                    }
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }).start()
+//            return false
+//        }
+//    }
 
     @JavascriptInterface
     fun postMessage(jsonParam: String) {

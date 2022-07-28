@@ -7,9 +7,11 @@ import android.os.Bundle
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.kokasin.activity.MainWebViewActivity
+import com.kokasin.util.CallEvent
 import com.kokasin.util.LogUtil
 import com.kokasin.util.NotificationUtil
 import com.kokasin.util.PreferenceUtil
+import org.greenrobot.eventbus.EventBus
 
 class FirebaseInstanceIDService : FirebaseMessagingService() {
 
@@ -23,6 +25,7 @@ class FirebaseInstanceIDService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         LogUtil.e("test", "remoteMessage.getData() : " + remoteMessage.data)
+        LogUtil.e("test", "remoteMessage.notification() : " + remoteMessage.notification)
 
         val bundle = Bundle()
         for ((key, value) in remoteMessage.data.entries) {
@@ -32,6 +35,7 @@ class FirebaseInstanceIDService : FirebaseMessagingService() {
         val intent = Intent(this, MainWebViewActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent.putExtras(bundle)
+
         val uniqueInt = (System.currentTimeMillis() and 0xfffffff).toInt()
         val contentIntent: PendingIntent?
 
@@ -54,5 +58,7 @@ class FirebaseInstanceIDService : FirebaseMessagingService() {
 
         val nid = (System.currentTimeMillis() / 1000).toInt() // 여러개 표시하기 위해
         NotificationUtil.showNotification(this, nid, bundle, contentIntent)
+
+        EventBus.getDefault().post(CallEvent(1));
     }
 }

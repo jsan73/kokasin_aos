@@ -10,6 +10,7 @@ class PreferenceUtil(private val context: Context) {
     object KEYS {
         const val PREF_NAME = "settings"
         const val TOKEN = "token"
+        const val PWD = "password"
         const val REFRESH_TOKEN = "refreshToken"
         const val TOKEN_DATE = "token_date"  // 토큰 저장한 날짜
         const val PUSH_ID = "push_id"

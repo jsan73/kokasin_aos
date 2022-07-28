@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/workspaces/kokasin_aos/app/src/main/res/drawable/ic_launcher_background.xml" value="0.239" />
         <entry key="..\:/workspaces/kokasin_aos/app/src/main/res/layout/activity_base_webview.xml" value="0.17864583333333334" />
         <entry key="..\:/workspaces/kokasin_aos/app/src/main/res/layout/activity_common_webview.xml" value="0.17864583333333334" />
         <entry key="..\:/workspaces/kokasin_aos/app/src/main/res/layout/activity_main_webview.xml" value="0.1640625" />

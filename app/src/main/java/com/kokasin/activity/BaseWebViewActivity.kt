@@ -96,6 +96,7 @@ open class BaseWebViewActivity :BaseActivity() {
 
         val webSettings = webView.settings
         webSettings.javaScriptEnabled = true
+        webSettings.setGeolocationEnabled(true)
         webSettings.textZoom = 100
         webSettings.useWideViewPort = true
         webSettings.domStorageEnabled = true
@@ -315,6 +316,14 @@ open class BaseWebViewActivity :BaseActivity() {
                 LogUtil.d("[WebView JS Console Error] = ${consoleMessage?.message()} -- From line ${consoleMessage?.lineNumber()} sourceID : $[consoleMessage.sourceId()]")
                 return super.onConsoleMessage(consoleMessage)
             }
+
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback?
+            ) {
+                super.onGeolocationPermissionsShowPrompt(origin, callback)
+                callback?.invoke(origin, true, false)
+            }
         }
     }
 
@@ -376,6 +385,14 @@ open class BaseWebViewActivity :BaseActivity() {
             mBaseWebView.loadUrl(DomainUtil.serverUrl(this))
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+    fun reloadMap() {
+        var url = mBaseWebView.url
+        if(url.equals(DomainUtil.mainUrl(this))) {
+            mBaseWebView.loadUrl("javascript:window.InterfaceLocation.requestLocation()")
+        }else{
+            loadMain()
         }
     }
 

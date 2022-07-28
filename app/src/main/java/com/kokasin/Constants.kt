@@ -23,7 +23,7 @@ object Constants {
     // URL 정의
     object URL {
         const val MAIN_URL: String = BuildConfig.serverUrl + "/"
-        const val LOGIN_URL: String = BuildConfig.loginUrl
+//        const val LOGIN_URL: String = BuildConfig.loginUrl
         const val API_URL: String = BuildConfig.serverUrl + "/asetadduser"
     }
 

@@ -1,9 +1,14 @@
 package com.kokasin.activity
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -11,9 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kokasin.R
 import com.kokasin.databinding.ActivityMainWebviewBinding
-import com.kokasin.util.DomainUtil
-import com.kokasin.util.LogUtil
-import com.kokasin.util.PreferenceUtil
+import com.kokasin.util.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 class MainWebViewActivity :BaseWebViewActivity() {
@@ -21,6 +27,8 @@ class MainWebViewActivity :BaseWebViewActivity() {
     private lateinit var binding: ActivityMainWebviewBinding
     private var mIsFinish = false
     private val mExitTimer = Timer()
+    private val MY_PERMISSION_ACCESS_ALL = 100
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +40,65 @@ class MainWebViewActivity :BaseWebViewActivity() {
         initUI()
         saveFcmToken()
         loadMain()  // 자동로그인 실행
-//
-//        // 백그라운드에서 푸시 알림 선택하여 실행했는지 체크 (바로 실행하면 안열림)
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            checkPushRun(getIntent())
-//        }, 2500)
+
+        // 백그라운드에서 푸시 알림 선택하여 실행했는지 체크 (바로 실행하면 안열림)
+        Handler(Looper.getMainLooper()).postDelayed({
+            checkPushRun(getIntent())
+        }, 2500)
+
+
+
     }
+
+    override fun onStart() {
+        super.onStart()
+        checkPermission()
+        EventBus.getDefault().register(this); // 이벤트 버스 등록
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) // SubScribe 어노테이션 등록
+    fun MessageEvent(event: CallEvent) {
+        // 메시지를 받을 때 마다 이 콜백 메소드가 호출 됨
+        LogUtil.e("test", event.id.toString())
+        Toast.makeText(this, "위치 전송 됨", Toast.LENGTH_SHORT).show()
+        reloadMap()
+    }
+    override fun onStop(){
+        super.onStop();
+        EventBus.getDefault().unregister(this); // 이벤트 버스 해제
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private fun checkPermission() {
+//        val hasWriteStoragePermission: Boolean = CommonUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        val cameraPermission: Boolean = CommonUtil.hasPermission(this, Manifest.permission.CAMERA)
+        val perFine = CommonUtil.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        val perCoarse = CommonUtil.hasPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        if(perFine && perCoarse) {
+
+        }else{
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,  Manifest.permission.ACCESS_COARSE_LOCATION),MY_PERMISSION_ACCESS_ALL)
+        }
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode === MY_PERMISSION_ACCESS_ALL) {
+            if (grantResults.size > 0) {
+                for (grant in grantResults) {
+                    if (grant != PackageManager.PERMISSION_GRANTED) System.exit(0)
+                }
+            }
+        }
+    }
+
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
