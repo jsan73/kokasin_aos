@@ -21,7 +21,7 @@ import java.net.URLDecoder
 
 
 object NotificationUtil {
-    private const val DEFAULT_CHANNEL_ID = "GP_DEFAULT_CHANNEL_ID"
+    private const val DEFAULT_CHANNEL_ID = "KS_DEFAULT_CHANNEL_ID"
 
     // 노티피케이션 채널 생성 (앱 시작 후 처음 한번 실행)
     fun createNotificationChannel(context: Context) {

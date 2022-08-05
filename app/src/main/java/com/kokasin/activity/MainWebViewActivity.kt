@@ -34,12 +34,12 @@ class MainWebViewActivity :BaseWebViewActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_webview)
 
-//        val intent = Intent(this, GPIntroActivity::class.java)
+//        val intent = Intent(this, IntroActivity::class.java)
 //        startActivity(intent)
 
         initUI()
         saveFcmToken()
-        loadMain()  // 자동로그인 실행
+        loadMain()
 
         // 백그라운드에서 푸시 알림 선택하여 실행했는지 체크 (바로 실행하면 안열림)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -58,8 +58,7 @@ class MainWebViewActivity :BaseWebViewActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN) // SubScribe 어노테이션 등록
     fun MessageEvent(event: CallEvent) {
-        // 메시지를 받을 때 마다 이 콜백 메소드가 호출 됨
-        LogUtil.e("test", event.id.toString())
+        // Push 메시지를 받을 때 마다 이 콜백 메소드가 호출 됨 (이벤트 버스 사용)
         Toast.makeText(this, "위치 전송 됨", Toast.LENGTH_SHORT).show()
         reloadMap()
     }
@@ -68,10 +67,9 @@ class MainWebViewActivity :BaseWebViewActivity() {
         EventBus.getDefault().unregister(this); // 이벤트 버스 해제
     }
 
+    // 현재 위치 접속권한
     @TargetApi(Build.VERSION_CODES.M)
     private fun checkPermission() {
-//        val hasWriteStoragePermission: Boolean = CommonUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//        val cameraPermission: Boolean = CommonUtil.hasPermission(this, Manifest.permission.CAMERA)
         val perFine = CommonUtil.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         val perCoarse = CommonUtil.hasPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
 
@@ -134,7 +132,7 @@ class MainWebViewActivity :BaseWebViewActivity() {
             }
         }
     }
-    // 푸시 토큰 저장
+    // 푸시 토큰 저장 (웹서버에 저장이 필요함)
     private fun saveFcmToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if(task.isSuccessful) {

@@ -77,13 +77,13 @@ open class BaseWebViewActivity :BaseActivity() {
         //mProgressLoading = progressLoading
 
         // 쿠키 Sync
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
-            val cookieManager = CookieManager.getInstance()
-            cookieManager.setAcceptCookie(true)
-            cookieManager.setAcceptThirdPartyCookies(webView, true)
-        } else {
-            CookieSyncManager.createInstance(this)
-        }
+//        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+//            val cookieManager = CookieManager.getInstance()
+//            cookieManager.setAcceptCookie(true)
+//            cookieManager.setAcceptThirdPartyCookies(webView, true)
+//        } else {
+//            CookieSyncManager.createInstance(this)
+//        }
 
         // 디폴트 false (사용 시 인터페이스 호출)
         val isDebug = PreferenceUtil(this).getValue(PreferenceUtil.KEYS.DEBUGGING_YN, "Y")
@@ -188,15 +188,15 @@ open class BaseWebViewActivity :BaseActivity() {
                 return false
             }
 
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                LogUtil.e("test", "onPageStarted :: $url")
-
-                // 최초 앱 진입 시에는 로딩바 안뜨도록 (인트로 전에 잠깐 보이는 현상 방지)
-                if(!url!!.contains("sendUrl")) {
-                    setLoadingProgressBar(View.VISIBLE)
-                }
-            }
+//            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+//                super.onPageStarted(view, url, favicon)
+//                LogUtil.e("test", "onPageStarted :: $url")
+//
+//                // 최초 앱 진입 시에는 로딩바 안뜨도록 (인트로 전에 잠깐 보이는 현상 방지)
+//                if(!url!!.contains("sendUrl")) {
+//                    setLoadingProgressBar(View.VISIBLE)
+//                }
+//            }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
@@ -343,15 +343,12 @@ open class BaseWebViewActivity :BaseActivity() {
             LogUtil.e("checkPushRun() :: $bundle")
 
             if (bundle != null) {
-                val linkUrl = bundle.getString(Constants.PUSH.PUSH_URL)
-                if (!TextUtils.isEmpty(linkUrl)) {
-                    mBaseWebView.loadUrl(DomainUtil.serverUrl(this) + "$linkUrl")
+                    mBaseWebView.loadUrl(DomainUtil.serverUrl(this))
 
                     getIntent().replaceExtras(Bundle())
                     getIntent().action = ""
                     getIntent().data = null
                     getIntent().flags = 0
-                }
             }
         }
     }
