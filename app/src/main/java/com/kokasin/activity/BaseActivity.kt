@@ -9,6 +9,7 @@ import android.util.Base64
 import android.view.View
 import android.webkit.CookieManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
@@ -97,8 +98,7 @@ open class BaseActivity: AppCompatActivity() {
         val appVersion = CommonUtil.getAppVersion(this@BaseActivity)
         val pushToken = PreferenceUtil(this@BaseActivity).getValue(
             PreferenceUtil.KEYS.PUSH_ID, "")
-        val isPushEnable: Boolean = NotificationUtil.areNotificationsEnabled(
-            this@BaseActivity)
+        val isPushEnable: Boolean = NotificationManagerCompat.from(this@BaseActivity).areNotificationsEnabled()
         val pushYn = if(isPushEnable) { "Y" } else { "N" }
 
         // Base64 인코딩 필요

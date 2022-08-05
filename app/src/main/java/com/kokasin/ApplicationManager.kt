@@ -7,7 +7,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import com.downloader.PRDownloader
-import com.kokasin.util.NotificationUtil
 
 class ApplicationManager: Application() {
     override fun onCreate() {
